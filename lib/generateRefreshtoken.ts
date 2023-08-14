@@ -4,17 +4,16 @@ import { ObjectId } from "mongoose";
 
 export default async function generateToken(id: ObjectId) {
   const cert = fs.readFileSync("public.pem");
-  const expiry = Date.now() + 10 * 60 * 1000;
+  const expiry = Date.now() + 20 * 1000; // Two day expiry
 
   const tokenContent = {
     sub: id,
     exp: expiry,
     iat: Date.now(),
-    aud: "api",
-    scope: "read write",
-    token_type: "access",
+    token_type: "refresh",
   };
 
+  console.log(tokenContent);
   const token = jwt.sign(tokenContent, cert, {
     algorithm: "RS256",
   });

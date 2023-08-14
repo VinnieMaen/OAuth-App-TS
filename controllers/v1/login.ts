@@ -1,10 +1,12 @@
 import express, { Express, Request, Response } from "express";
 
 import bcrypt from "bcrypt";
+import { ObjectId } from "mongoose";
 
 import User from "../../models/User";
-import generateToken from "../../lib/generateAccesstoken";
-import { ObjectId } from "mongoose";
+
+import generateAccessToken from "../../lib/generateAccesstoken";
+import generateRefreshToken from "../../lib/generateRefreshtoken";
 
 type User = {
   _id: ObjectId;
@@ -34,8 +36,11 @@ export default async function login(req: Request, res: Response) {
           message: "Invalid credentials!",
         });
 
-      let accessToken = await generateToken(user?._id);
+      let accessToken = await generateAccessToken(user?._id);
+      let refreshToken = await generateRefreshToken(user?._id);
+
       res.cookie("authorization", "Bearer " + accessToken);
+      res.cookie("refresh_token", "Bearer " + refreshToken);
 
       res.status(200).json({ success: true, message: "" });
     }

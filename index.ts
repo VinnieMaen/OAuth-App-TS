@@ -4,7 +4,16 @@ import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
 import routes from "./routes";
 import { connect } from "./lib/database";
+import { ObjectId } from "mongoose";
 
+declare global {
+  namespace Express {
+    interface Request {
+      customData: string;
+      id: ObjectId;
+    }
+  }
+}
 dotenv.config();
 
 const app: Express = express();
@@ -12,7 +21,7 @@ const port = process.env.PORT;
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 10,
+  max: 600,
   standardHeaders: true,
   legacyHeaders: false,
 });

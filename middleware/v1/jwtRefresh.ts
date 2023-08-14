@@ -31,7 +31,6 @@ export default async function (req: Request, res: Response, next: Function) {
       }
 
       res.locals.id = decoded.sub;
-      console.log(res.locals.id);
       next();
     });
   } catch (error) {

@@ -18,7 +18,6 @@ export default async function (req: Request, res: Response, next: Function) {
     let accessToken = req.cookies.authorization.split("Bearer ")[1];
     jwt.verify(accessToken, cert, async function (err: any, decoded: any) {
       let user = await User.findById(decoded.sub);
-      console.log(decoded.exp, Date.now());
       if (!user)
         return res.status(404).json({
           success: false,

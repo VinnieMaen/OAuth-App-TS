@@ -4,11 +4,6 @@ import jwt from "jsonwebtoken";
 import fs from "fs";
 import User from "../../models/User";
 
-interface JWTResult {
-  id: string;
-  expires: number;
-}
-
 export default async function (req: Request, res: Response, next: Function) {
   const cert = fs.readFileSync("public.pem");
 
@@ -22,7 +17,6 @@ export default async function (req: Request, res: Response, next: Function) {
 
     jwt.verify(refreshToken, cert, async function (err: any, decoded: any) {
       let user = await User.findById(decoded.sub);
-
       if (!user)
         return res.status(404).json({
           success: false,
@@ -32,11 +26,12 @@ export default async function (req: Request, res: Response, next: Function) {
       if (decoded.exp < Date.now()) {
         return res.status(403).json({
           success: false,
-          message: "Refresh Token Expired!",
+          message: "Session Expired!",
         });
       }
 
       res.locals.id = decoded.sub;
+      console.log(res.locals.id);
       next();
     });
   } catch (error) {

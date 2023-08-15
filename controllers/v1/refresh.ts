@@ -4,7 +4,6 @@ import generateAccessToken from "../../lib/generateAccesstoken";
 import generateRefreshToken from "../../lib/generateRefreshtoken";
 
 export default async function refresh(req: Request, res: Response) {
-  console.log(req);
   const accessToken = await generateAccessToken(res.locals.id);
   const refreshToken = await generateRefreshToken(res.locals.id);
 

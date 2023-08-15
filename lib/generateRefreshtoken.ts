@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import fs from "fs";
 import { ObjectId } from "mongoose";
+import User from "../models/User";
 
 export default async function generateToken(id: ObjectId) {
   const cert = fs.readFileSync("public.pem");
@@ -16,6 +17,9 @@ export default async function generateToken(id: ObjectId) {
   const token = jwt.sign(tokenContent, cert, {
     algorithm: "RS256",
   });
+
+  // Save refresh token in database + invalidate previous
+  await User.findOneAndUpdate({ _id: id }, { $set: { refresh_token: token } });
 
   return token;
 }

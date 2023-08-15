@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       require: true,
     },
+    refresh_token: {
+      type: String,
+      require: false,
+    },
   },
   { collection: "Users", minimize: false }
 );

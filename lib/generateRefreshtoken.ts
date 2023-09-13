@@ -3,7 +3,7 @@ import fs from "fs";
 import { ObjectId } from "mongoose";
 import User from "../models/User";
 
-export default async function generateToken(id: ObjectId) {
+export default async function generateToken(id: ObjectId, accessToken: String) {
   const cert = fs.readFileSync("public.pem");
   const expiry = Date.now() + 2 * 24 * 60 * 60 * 1000; // Two day expiry
 
@@ -11,6 +11,7 @@ export default async function generateToken(id: ObjectId) {
     sub: id,
     exp: expiry,
     iat: Date.now(),
+    accessToken: accessToken,
     token_type: "refresh",
   };
 

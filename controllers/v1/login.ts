@@ -37,7 +37,7 @@ export default async function login(req: Request, res: Response) {
         });
 
       let accessToken = await generateAccessToken(user?._id);
-      let refreshToken = await generateRefreshToken(user?._id);
+      let refreshToken = await generateRefreshToken(user?._id, accessToken);
 
       res.cookie("authorization", "Bearer " + accessToken);
       res.cookie("refresh_token", "Bearer " + refreshToken);

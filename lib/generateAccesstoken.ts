@@ -4,7 +4,7 @@ import { ObjectId } from "mongoose";
 
 export default async function generateToken(id: ObjectId) {
   const cert = fs.readFileSync("public.pem");
-  const expiry = Date.now() + 10 * 60 * 1000;
+  const expiry = Date.now() + 5 * 60 * 1000;
 
   const tokenContent = {
     sub: id,

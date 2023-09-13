@@ -5,7 +5,7 @@ import generateRefreshToken from "../../lib/generateRefreshtoken";
 
 export default async function refresh(req: Request, res: Response) {
   const accessToken = await generateAccessToken(res.locals.id);
-  const refreshToken = await generateRefreshToken(res.locals.id);
+  const refreshToken = await generateRefreshToken(res.locals.id, accessToken);
 
   res.cookie("authorization", "Bearer " + accessToken);
   res.cookie("refresh_token", "Bearer " + refreshToken);

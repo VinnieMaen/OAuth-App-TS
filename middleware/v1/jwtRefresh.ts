@@ -13,16 +13,16 @@ export default async function (req: Request, res: Response, next: Function) {
         .status(403)
         .json({ success: false, message: "Invalid Refresh Token!" });
 
+    console.log(req.cookies);
     const refreshToken = req.cookies.refresh_token.split("Bearer ")[1];
-
-    const user = await User.findOne({ refresh_token: refreshToken });
-
-    if (!user)
-      return res
-        .status(403)
-        .json({ success: false, message: "Invalid Refresh Token!" });
+    const accessToken = req.cookies.authorization.split("Bearer ")[1];
 
     jwt.verify(refreshToken, cert, async function (err: any, decoded: any) {
+      if (decoded.accessToken !== accessToken)
+        return res
+          .status(403)
+          .json({ success: false, message: "Invalid Refresh Token!" });
+
       let user = await User.findById(decoded.sub);
       if (!user)
         return res.status(404).json({
